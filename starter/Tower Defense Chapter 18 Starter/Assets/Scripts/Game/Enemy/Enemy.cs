@@ -64,4 +64,41 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void Update()
+    {
+        //1 While there’s still waypoints left, update the movement.
+        if (wayPointIndex <
+        WayPointManager.Instance.Paths[pathIndex].WayPoints.Count)
+        {
+            UpdateMovement();
+        }
+        else
+        { // 2 No more waypoints, so call OnGotToLastWayPoint().
+            OnGotToLastWayPoint();
+        }
+    }
+    private void UpdateMovement()
+    {
+        //3 The next waypoint is the target position.
+        Vector3 targetPosition =
+        WayPointManager.Instance.Paths[pathIndex]
+        .WayPoints[wayPointIndex].position;
+
+        //4 Move towards the target position.
+        transform.position = Vector3.MoveTowards(
+        transform.position, targetPosition,
+        moveSpeed * Time.deltaTime);
+
+        //5 Look at the target.
+        transform.LookAt(targetPosition);
+
+            //6 If the enemy is very close to the target waypoint, set the next waypoint as the
+            // target.You can’t just use if (transform.position == targetPosition) because that
+            // will often fails due to floating point error. Floats are not accurate enough to do
+            // exact comparisons.
+        if (Vector3.Distance(transform.position, targetPosition) < .1f)
+        {
+            wayPointIndex++;
+        }
+    }
 }
