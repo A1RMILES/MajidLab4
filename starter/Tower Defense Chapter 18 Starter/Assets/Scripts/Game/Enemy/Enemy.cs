@@ -40,6 +40,10 @@ public class Enemy : MonoBehaviour
     public int pathIndex = 0;
 
     private int wayPointIndex = 0;
+    void Start()
+    {
+        EnemyManager.Instance.RegisterEnemy(this);
+    }
 
     void OnGotToLastWayPoint()
     {
@@ -61,7 +65,17 @@ public class Enemy : MonoBehaviour
     {
         if (gameObject != null)
         {
-            Destroy(gameObject);
+            //1 Unregister this enemy.
+            EnemyManager.Instance.UnRegister(this);
+
+            //2 Add the AutoScaler component and set it to shrink rapidly as a visual dying effect
+            gameObject.AddComponent<AutoScaler>().scaleSpeed = -2;
+
+            //3 Disable the enemy script.
+            enabled = false;
+
+            //4 Destroy itself after 0.3 seconds to let the scaling effect show
+            Destroy(gameObject, 0.3f);
         }
     }
     void Update()
@@ -90,12 +104,13 @@ public class Enemy : MonoBehaviour
         moveSpeed * Time.deltaTime);
 
         //5 Look at the target.
-        transform.LookAt(targetPosition);
+        transform.localRotation = UtilityMethods.
+        SmoothlyLook(transform, targetPosition);
 
-            //6 If the enemy is very close to the target waypoint, set the next waypoint as the
-            // target.You can’t just use if (transform.position == targetPosition) because that
-            // will often fails due to floating point error. Floats are not accurate enough to do
-            // exact comparisons.
+        //6 If the enemy is very close to the target waypoint, set the next waypoint as the
+        // target.You can’t just use if (transform.position == targetPosition) because that
+        // will often fails due to floating point error. Floats are not accurate enough to do
+        // exact comparisons.
         if (Vector3.Distance(transform.position, targetPosition) < .1f)
         {
             wayPointIndex++;
