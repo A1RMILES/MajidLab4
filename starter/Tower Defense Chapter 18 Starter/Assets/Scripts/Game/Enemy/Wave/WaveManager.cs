@@ -48,6 +48,7 @@ public class WaveManager : MonoBehaviour
                 activeWave = enemyWave;
                 activatedWaves.Add(enemyWave);
                 spawnCounter = 0f;
+                GameManager.Instance.waveNumber++;
                 //6 Break out of the list iteration as a suitable wave has been found
                 break;
             }
@@ -88,8 +89,10 @@ public class WaveManager : MonoBehaviour
                     //that means all waves are over.
                     if (activatedWaves.Count == enemyWaves.Count)
                     {
+                        GameManager.Instance.enemySpawningOver = true;
                         // All waves are over
                     }
+                    
                 }
             }
         }
