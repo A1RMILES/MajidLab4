@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
             if (EnemyManager.Instance.Enemies.Count == 0)
             {
                 OnGameWin();
+                UIManager.Instance.ShowWinScreen();
             }
         }
         // When ESC is pressed, quit to the title screen
@@ -71,10 +72,12 @@ public class GameManager : MonoBehaviour
     public void OnEnemyEscape()
     {
         escapedEnemies++;
+        UIManager.Instance.ShowDamage();
         if (escapedEnemies == maxAllowedEscapedEnemies)
         {
             // Too many enemies escaped, you lose the game
             OnGameLose();
+            UIManager.Instance.ShowLoseScreen();
         }
     }
     //2

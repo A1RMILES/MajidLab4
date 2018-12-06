@@ -50,6 +50,7 @@ public class WaveManager : MonoBehaviour
                 spawnCounter = 0f;
                 GameManager.Instance.waveNumber++;
                 //6 Break out of the list iteration as a suitable wave has been found
+                UIManager.Instance.ShowCenterWindow("Wave " + GameManager.Instance.waveNumber);
                 break;
             }
         }

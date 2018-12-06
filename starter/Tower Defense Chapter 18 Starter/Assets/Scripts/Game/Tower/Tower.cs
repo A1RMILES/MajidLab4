@@ -124,6 +124,9 @@ public class Tower : MonoBehaviour
         timeBetweenAttacksInSeconds *= 0.7f;
         aggroRadius *= 1.20f;
     }
-
+    public void ShowTowerInfo()
+    {
+        UIManager.Instance.ShowTowerInfoWindow(this);
+    }
 
 }

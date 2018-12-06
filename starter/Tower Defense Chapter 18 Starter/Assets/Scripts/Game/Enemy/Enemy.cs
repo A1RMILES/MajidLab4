@@ -36,6 +36,12 @@ public class Enemy : MonoBehaviour
     public float health = 100f;
     public float moveSpeed = 3f;
     public int goldDrop = 10;
+    //1
+    public float timeEnemyStaysFrozenInSeconds = 2f;
+    //2
+    public bool frozen;
+    //3
+    private float freezeTimer;
 
     public int pathIndex = 0;
 
@@ -65,7 +71,23 @@ public class Enemy : MonoBehaviour
     {
         GameManager.Instance.gold += goldDrop;
     }
-
+    //1
+    public void Freeze()
+    {
+        if (!frozen)
+        {
+            //2
+            frozen = true;
+            moveSpeed /= 2;
+        }
+    }
+    //3
+    void Defrost()
+    {
+        freezeTimer = 0f;
+        frozen = false;
+        moveSpeed *= 2;
+    }
     void Die()
     {
         if (gameObject != null)
@@ -94,6 +116,17 @@ public class Enemy : MonoBehaviour
         else
         { // 2 No more waypoints, so call OnGotToLastWayPoint().
             OnGotToLastWayPoint();
+        }
+        //1
+        if (frozen)
+        {
+            //2
+            freezeTimer += Time.deltaTime;
+            //3
+            if (freezeTimer >= timeEnemyStaysFrozenInSeconds)
+            {
+                Defrost();
+            }
         }
     }
     private void UpdateMovement()
